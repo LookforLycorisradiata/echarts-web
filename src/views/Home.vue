@@ -42,7 +42,8 @@
 </template>
 
 <script>
-// @ is an alias to /src
+/* eslint-disable no-unused-vars */
+import { getPackageList, getNewData } from '@/api'
 import LineChart from '@/components/LineChart'
 export default {
   name: 'Home',
@@ -63,10 +64,15 @@ export default {
   },
   methods: {
     // 获取数据
-    getData () {
+    async getData () {
       const t = 1000 // 暂时按1000ms
-      setInterval(() => {
+
+      await getPackageList()
+
+      setInterval(async () => {
+        // mock 数据，若改用真实请求，则注释下行代码，并取消下方第二行代码注释
         const data = this.mockData()
+        // const data = await getNewData()
 
         this.handleData(data)
       }, t)

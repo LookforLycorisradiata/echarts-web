@@ -40,6 +40,10 @@ export default {
     vm.$nextTick(() => {
       vm.initChart()
 
+      // 使用 onresize，则只有最后一个赋值生效，故改用  addEventListener
+      window.addEventListener('resize', () => {
+        vm.chart.resize()
+      })
       // setInterval(() => {
       //   vm.update(new Date())
       //   vm.chart.setOption(vm.option)
@@ -81,6 +85,7 @@ export default {
       chart.setOption(this.option)
 
       this.chart = chart
+      return chart
     },
 
     initData () {
@@ -135,7 +140,8 @@ export default {
 </script>
 <style lang='scss' scoped>
 .line-chart {
-  width: 800px;
+  flex: 1;
+  // width: 800px;
   height: 360px;
   opacity: 0.8;
   & + .line-chart{
