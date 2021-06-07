@@ -43,7 +43,7 @@
 
 <script>
 /* eslint-disable no-unused-vars */
-import { getPackageList, getNewData } from '@/api'
+import { getLastData } from '@/api'
 import LineChart from '@/components/LineChart'
 export default {
   name: 'Home',
@@ -66,13 +66,10 @@ export default {
     // 获取数据
     async getData () {
       const t = 1000 // 暂时按1000ms
-
-      await getPackageList()
-
       setInterval(async () => {
         // mock 数据，若改用真实请求，则注释下行代码，并取消下方第二行代码注释
-        const data = this.mockData()
-        // const data = await getNewData()
+        // const data = this.mockData()
+        const data = await getLastData()
 
         this.handleData(data)
       }, t)
@@ -90,40 +87,38 @@ export default {
         BP: '0', // 后管号
         CW: 'CW', // 焊接位置（左右）
         Time: '2009-0b-10 22:43:39.576', // 时间
-        Data: {
-          TA: 24.73, // 环境温度
-          HA: 54.56, // 环境湿度
-          V: 2.27, // 焊接电压
-          C: 1.82, // 焊接电流
-          FS: 0.15, // 送丝速度
-          WPn: '0,0,0,0,May 24 2021', // 依次是4G信号，注网状态，服务器连接状态，焊口码扫码状态，版本号
-          WA: '-42,8,46', // 焊接角度
-          WB: 1, // 焊道计数
-          WS: '0.00', // 焊接速度
-          LE: '0.000000000', // 焊接线能量
-          PT: '0.00', // 预热温度
-          IT: 43.81 // 层间温度
-        }
+        TA: 24.73, // 环境温度
+        HA: 54.56, // 环境湿度
+        V: 2.27, // 焊接电压
+        C: 1.82, // 焊接电流
+        FS: 0.15, // 送丝速度
+        WPn: '0,0,0,0,May 24 2021', // 依次是4G信号，注网状态，服务器连接状态，焊口码扫码状态，版本号
+        WA: '-42,8,46', // 焊接角度
+        WB: 1, // 焊道计数
+        WS: '0.00', // 焊接速度
+        LE: '0.000000000', // 焊接线能量
+        PT: '0.00', // 预热温度
+        IT: 43.81 // 层间温度
       }
       demo.Time = new Date().toTimeString().split(' ')[0]
-      demo.Data.TA = this.getRandom(10, 50, 2)
-      demo.Data.V = this.getRandom(1, 10, 2)
-      demo.Data.C = this.getRandom(1, 5, 2)
+      demo.TA = this.getRandom(10, 50, 2)
+      demo.V = this.getRandom(1, 10, 2)
+      demo.C = this.getRandom(1, 5, 2)
 
       const arr = []
       arr[0] = this.getRandom(-90, 180, 0)
       arr[1] = this.getRandom(-90, 180, 0)
       arr[2] = this.getRandom(-90, 180, 0)
-      demo.Data.WA = arr.join(',')
+      demo.WA = arr.join(',')
 
       return demo
     },
 
     handleData (data) {
-      this.currentV = data.Data.V
-      this.currentC = data.Data.C
-      this.currentTA = data.Data.TA
-      this.currentWA = data.Data.WA
+      this.currentV = data.v
+      this.currentC = data.c
+      this.currentTA = data.ta
+      this.currentWA = data.wa
       this.currentTime = data.Time
     },
 

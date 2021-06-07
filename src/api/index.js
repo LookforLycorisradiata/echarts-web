@@ -6,20 +6,12 @@ import service from '@/utils/request'
 
 // const baseUrl = '/api/device-service' // 如 设备服务
 
-const baseUrl = '/api/manage'
-
-// 获取安装包列表
-export function getPackageList () {
-  return service({
-    url: baseUrl + '/remote-client/software/list',
-    method: 'get'
-  })
-}
+const baseUrl = '/welding'
 
 // 获取最新数据
-export function getNewData () {
+export function getLastData () {
   return service({
-    url: baseUrl + '/getNewData',
+    url: baseUrl + '/getLastData',
     method: 'get'
   })
 }
@@ -31,7 +23,7 @@ export function getNewData () {
  */
 export function getDataList (params) {
   return service({
-    url: baseUrl + '/getNewData',
+    url: baseUrl + '/getDataList',
     method: 'get',
     params
   })
