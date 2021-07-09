@@ -119,7 +119,7 @@ export default {
       this.currentC = data.c
       this.currentTA = data.ta
       this.currentWA = data.wa
-      this.currentTime = data.Time
+      this.currentTime = data.time
     },
 
     /**
