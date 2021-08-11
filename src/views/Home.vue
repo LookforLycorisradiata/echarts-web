@@ -1,5 +1,24 @@
 <template>
   <div class="main">
+    <div class="header">
+      <el-select
+        v-model="currentDevice"
+        filterable
+        placeholder="请选择设备"
+        size="small"
+        @focus="getDeivcesList"
+        @change="handleDeviceChange"
+      >
+        <el-option
+          v-for="item in devicesList"
+          :key="item"
+          :label="item"
+          :value="item"
+        >
+        </el-option>
+      </el-select>
+    </div>
+
     <div class="echarts">
       <!-- 电压 -->
       <line-chart
@@ -8,6 +27,7 @@
         unit="V"
         echart="voltage"
         title="电压"
+        ref="lineChart1"
       ></line-chart>
 
       <!-- 电流 -->
@@ -17,25 +37,28 @@
         unit="A"
         echart="current"
         title="电流"
+        ref="lineChart2"
       ></line-chart>
     </div>
     <div class="echarts">
       <!-- 温度 -->
       <line-chart
-        :value="currentTA"
+        :value="currentIT"
         :time="currentTime"
         unit="°C"
         echart="temperature"
         title="温度"
+        ref="lineChart3"
       ></line-chart>
 
-       <!-- 角度 -->
+      <!-- 角度 -->
       <line-chart
         :value="currentWA"
         :time="currentTime"
         unit="°C"
         echart="angle"
         title="角度"
+        ref="lineChart4"
       ></line-chart>
     </div>
   </div>
@@ -43,40 +66,57 @@
 
 <script>
 /* eslint-disable no-unused-vars */
-import { getLastData } from '@/api'
+/* eslint-disable space-before-function-paren */
+import { getLastData, getDeivces } from '@/api'
 import LineChart from '@/components/LineChart'
 export default {
   name: 'Home',
-  data () {
+  data() {
     return {
       currentV: 0, // 当前电压
       currentC: 0, // 当前电流
-      currentTA: 0, // 当前温度
+      currentIT: 0, // 当前温度
       currentWA: '', // 当前角度
-      currentTime: '' // 当前时间
+      currentTime: '', // 当前时间
+      currentDevice: null, // 当前设备
+      devicesList: [] // 设备列表
     }
   },
   components: {
     LineChart
   },
-  created () {
+  created() {
+    this.getDeivcesList()
     this.getData()
   },
   methods: {
+    // 获取设备列表
+    async getDeivcesList() {
+      const { data: res } = await getDeivces()
+      this.devicesList = []
+      res.forEach((item) => {
+        // 仅显示在线设备
+        if (item.online === true) {
+          this.devicesList.push(item.name)
+        }
+      })
+      this.currentDevice = this.devicesList[0] // 默认选中第一个
+    },
+
     // 获取数据
-    async getData () {
+    async getData() {
       const t = 1000 // 暂时按1000ms
       setInterval(async () => {
         // mock 数据，若改用真实请求，则注释下行代码，并取消下方第二行代码注释
         // const data = this.mockData()
-        const data = await getLastData()
+        const data = await getLastData({ deviceId: this.currentDevice })
 
         this.handleData(data)
       }, t)
     },
 
     // mock 数据
-    mockData () {
+    mockData() {
       const demo = {
         EN: '0', // 设备号
         ZD: 'SPE-HJSHC-ZD-1002', // 设备名称
@@ -114,10 +154,10 @@ export default {
       return demo
     },
 
-    handleData (data) {
+    handleData(data) {
       this.currentV = data.v
       this.currentC = data.c
-      this.currentTA = data.ta
+      this.currentIT = data.it // 取采集温度
       this.currentWA = data.wa
       this.currentTime = data.time
     },
@@ -129,7 +169,7 @@ export default {
      * @param {*} fixed 有效位数
      * @return {*}
      */
-    getRandom (min, max, fixed) {
+    getRandom(min, max, fixed) {
       const num = Math.random() * max + min
       let result
       if (fixed) {
@@ -138,18 +178,37 @@ export default {
         result = parseInt(num)
       }
       return result
+    },
+
+    // 切换设备时重置 option
+    handleDeviceChange() {
+      this.$refs.lineChart1.resetOption()
+      this.$refs.lineChart2.resetOption()
+      this.$refs.lineChart3.resetOption()
+      this.$refs.lineChart4.resetOption()
     }
   }
 }
 </script>
 <style scoped>
-.main{
-  padding-top: 20px;
+.main {
+  padding-top: 10px;
+}
+
+.header {
+  text-align: left;
+  margin-bottom: 20px;
 }
 
 .echarts {
   display: flex;
   justify-content: center;
-  margin: 0 auto 30px;
+  margin: 0 auto 20px;
+}
+
+::v-deep .el-input__inner {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(220, 223, 230, 0.4);
 }
 </style>

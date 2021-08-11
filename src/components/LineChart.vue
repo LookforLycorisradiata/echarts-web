@@ -2,10 +2,11 @@
  * @Description:
 -->
 <template>
- <div class="line-chart" :id="echart"></div>
+  <div class="line-chart" :id="echart"></div>
 </template>
 
 <script>
+/* eslint-disable space-before-function-paren */
 import * as echarts from 'echarts'
 export default {
   name: 'line-chart',
@@ -16,17 +17,46 @@ export default {
     echart: String,
     title: String
   },
-  data () {
+  data() {
     return {
       option: {},
       chart: {},
       stream: null,
       mediaRecorder: undefined,
-      isRecording: false
+      isRecording: false,
+      defaultOption: {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross'
+          }
+        },
+        xAxis: {
+          type: 'category',
+          data: []
+        },
+        yAxis: {
+          type: 'value'
+        },
+        title: [
+          {
+            left: 'center',
+            top: '5%',
+            text: this.title
+          }
+        ],
+        series: [
+          {
+            data: [],
+            type: 'line',
+            showSymbol: false
+          }
+        ]
+      }
     }
   },
   watch: {
-    time (newVal) {
+    time(newVal) {
       if (this.value !== '') {
         this.update(this.value, newVal)
         this.chart.setOption(this.option)
@@ -34,8 +64,8 @@ export default {
     }
   },
   components: {},
-  created () {},
-  mounted () {
+  created() {},
+  mounted() {
     const vm = this
     vm.$nextTick(() => {
       vm.initChart()
@@ -51,7 +81,7 @@ export default {
     })
   },
   methods: {
-    initChart () {
+    initChart() {
       const chart = echarts.init(document.getElementById(this.echart), 'dark')
 
       this.option = {
@@ -68,11 +98,13 @@ export default {
         yAxis: {
           type: 'value'
         },
-        title: [{
-          left: 'center',
-          top: '5%',
-          text: this.title
-        }],
+        title: [
+          {
+            left: 'center',
+            top: '5%',
+            text: this.title
+          }
+        ],
         series: [
           {
             data: [],
@@ -88,14 +120,14 @@ export default {
       return chart
     },
 
-    initData () {
+    initData() {
       const d = new Date()
       for (let i = 0; i < 30; i++) {
         this.update(new Date(d.getTime() - (30 - i) * 2000))
       }
     },
 
-    update (value, time) {
+    update(value, time) {
       if (typeof value === 'string') {
         const arr = value.split(',')
         if (arr.length > 0) {
@@ -134,6 +166,14 @@ export default {
       if (this.option.xAxis.data.length > 30) {
         this.option.xAxis.data.shift()
       }
+    },
+
+    resetOption() {
+      this.option.xAxis.data = []
+      this.option.series.forEach((item) => {
+        item.data = []
+      })
+      this.chart.setOption(this.option)
     }
   }
 }
@@ -144,9 +184,8 @@ export default {
   // width: 800px;
   height: 360px;
   opacity: 0.8;
-  & + .line-chart{
+  & + .line-chart {
     margin-left: 30px;
   }
 }
-
 </style>
