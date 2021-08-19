@@ -79,7 +79,8 @@ export default {
       currentWA: '', // 当前角度
       currentTime: '', // 当前时间
       currentDevice: null, // 当前设备
-      devicesList: [] // 设备列表
+      devicesList: [], // 设备列表
+      timer: 0 // 计时器
     }
   },
   components: {
@@ -87,7 +88,13 @@ export default {
   },
   created() {
     this.getDeivcesList()
-    this.getData()
+    console.error(this.currentDevice)
+    if (this.currentDevice) {
+      this.getData()
+    }
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
   },
   methods: {
     // 获取设备列表
@@ -105,8 +112,9 @@ export default {
 
     // 获取数据
     async getData() {
+      // clearInterval(this.timer)
       const t = 1000 // 暂时按1000ms
-      setInterval(async () => {
+      this.timer = setInterval(async () => {
         // mock 数据，若改用真实请求，则注释下行代码，并取消下方第二行代码注释
         // const data = this.mockData()
         const data = await getLastData({ deviceId: this.currentDevice })
