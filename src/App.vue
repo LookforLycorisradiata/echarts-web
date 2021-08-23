@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <g-head></g-head>
-    <router-view/>
-    <g-foot></g-foot>
+    <!-- <g-head></g-head> -->
+    <router-view />
+    <!-- <g-foot></g-foot> -->
   </div>
 </template>
 <script>
-import GHead from '@/layout/Head'
-import GFoot from '@/layout/Foot'
+// import GHead from '@/layout/Head'
+// import GFoot from '@/layout/Foot'
 export default {
   components: {
-    GHead,
-    GFoot
+    // GHead,
+    // GFoot
   }
 }
 </script>
@@ -26,7 +26,7 @@ export default {
   color: #ffffff;
 }
 
-.main{
+.main {
   flex: 1;
 }
 </style>

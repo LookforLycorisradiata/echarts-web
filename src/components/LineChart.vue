@@ -41,8 +41,11 @@ export default {
         title: [
           {
             left: 'center',
-            top: '5%',
-            text: this.title
+            top: '2%',
+            text: this.title,
+            textStyle: {
+              fontSize: 14
+            }
           }
         ],
         series: [
@@ -182,7 +185,7 @@ export default {
 .line-chart {
   flex: 1;
   // width: 800px;
-  height: 360px;
+  height: 240px;
   opacity: 0.8;
   & + .line-chart {
     margin-left: 30px;

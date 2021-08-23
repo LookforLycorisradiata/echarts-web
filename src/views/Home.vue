@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="header">
-      <el-select
+      <!-- <el-select
         v-model="currentDevice"
         filterable
         placeholder="请选择设备"
@@ -16,7 +16,21 @@
           :value="item"
         >
         </el-option>
-      </el-select>
+      </el-select> -->
+
+      <select
+        v-model="currentDevice"
+        placeholder="请选择设备"
+        @focus="getDeivcesList"
+        @change="handleDeviceChange"
+      >
+        <option
+          v-for="item in devicesList"
+          :key="item"
+          :label="item"
+          :value="item"
+        ></option>
+      </select>
     </div>
 
     <div class="echarts">
@@ -79,7 +93,7 @@ export default {
       currentWA: '', // 当前角度
       currentTime: '', // 当前时间
       currentDevice: null, // 当前设备
-      devicesList: [], // 设备列表
+      devicesList: [1, 2, 3], // 设备列表
       timer: 0 // 计时器
     }
   },
@@ -87,11 +101,11 @@ export default {
     LineChart
   },
   created() {
-    this.getDeivcesList()
-    console.error(this.currentDevice)
-    if (this.currentDevice) {
-      this.getData()
-    }
+    this.getDeivcesList().then(() => {
+      if (this.currentDevice) {
+        this.getData()
+      }
+    })
   },
   beforeDestroy() {
     clearInterval(this.timer)
@@ -205,18 +219,27 @@ export default {
 
 .header {
   text-align: left;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .echarts {
   display: flex;
   justify-content: center;
-  margin: 0 auto 20px;
+  margin: 0 auto 10px;
 }
 
 ::v-deep .el-input__inner {
   background-color: rgba(255, 255, 255, 0.1);
   color: #fff;
+  border: 1px solid rgba(220, 223, 230, 0.4);
+}
+
+select {
+  padding: 5px;
+  outline: none;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.1);
+  /* color: #fff; */
   border: 1px solid rgba(220, 223, 230, 0.4);
 }
 </style>

@@ -1,5 +1,5 @@
 
-const BASE_URL = 'http://10.4.64.38:8888' // 请按实际服务地址进行替换
+const BASE_URL = 'http://10.4.64.148:8888' // 请按实际服务地址进行替换
 
 module.exports = {
   // outputDir: outputDir,  //设置构建文件目录
