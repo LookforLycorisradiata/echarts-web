@@ -238,7 +238,7 @@ select {
   padding: 5px;
   outline: none;
   border-radius: 2px;
-  background-color: rgba(255, 255, 255, 0.1);
+  /* background-color: rgba(255, 255, 255, 0.1); */
   /* color: #fff; */
   border: 1px solid rgba(220, 223, 230, 0.4);
 }
